@@ -92,7 +92,10 @@ spark.sql("CREATE DATABASE IF NOT EXISTS " + output_database)
 # COMMAND ----------
 
 # DBTITLE 1, Read input data.
-raw_data = spark.read.format("delta").load(input_table_path)
+if input_table_path == "/databricks-datasets/faqs":
+    raw_data = None
+else:
+    raw_data = spark.read.format("delta").load(input_table_path)
 
 # COMMAND ----------
 

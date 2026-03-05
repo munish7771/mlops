@@ -11,9 +11,11 @@ defaults:
     working-directory: ./sample_project/
 
 env:
-  ARM_TENANT_ID: ${{ secrets.STAGING_AZURE_SP_TENANT_ID }}
-  ARM_CLIENT_ID: ${{ secrets.STAGING_AZURE_SP_APPLICATION_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.STAGING_AZURE_SP_CLIENT_SECRET }}
+  DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+  DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+  # ARM_TENANT_ID: ${{ secrets.AZURE_SP_TENANT_ID }}
+  # ARM_CLIENT_ID: ${{ secrets.AZURE_SP_APPLICATION_ID }}
+  # ARM_CLIENT_SECRET: ${{ secrets.AZURE_SP_CLIENT_SECRET }}
   
 
 concurrency: sample_project-feature-training-integration-test-staging

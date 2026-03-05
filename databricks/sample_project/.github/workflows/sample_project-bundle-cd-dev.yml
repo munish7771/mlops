@@ -1,13 +1,13 @@
 # This GitHub workflow deploys Bundle resources (ML resource config and more)
 # defined under sample_project/resources/*
-# and sample_project/databricks.yml with prod deployment target configs,
-# when PRs are merged into the release branch
-name: Bundle Deployment for sample_project Prod
+# and sample_project/databricks.yml with dev deployment target configs,
+# when PRs are pushed into the dev branch
+name: Bundle Deployment for sample_project Dev
 
 on:
   push:
     branches:
-      - 'release'
+      - 'dev'
   workflow_dispatch:
 
 defaults:
@@ -23,17 +23,17 @@ env:
   
 
 jobs:
-  prod:
-    concurrency: sample_project-prod-bundle-job
+  dev:
+    concurrency: sample_project-dev-bundle-job
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: databricks/setup-cli@v0.236.0
-      - name: Validate Bundle For Prod
+      - name: Validate Bundle For Dev
         id: validate
         run: |
-          databricks bundle validate -t prod
-      - name: Deploy Bundle to Prod
+          databricks bundle validate -t dev
+      - name: Deploy Bundle to Dev
         id: deploy
         run: |
-          databricks bundle deploy -t prod
+          databricks bundle deploy -t dev

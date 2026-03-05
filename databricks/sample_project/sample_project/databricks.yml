@@ -8,13 +8,16 @@ bundle:
 variables:
   experiment_name:
     description: Experiment name for the model training.
-    default: /Users/${workspace.current_user.userName}/${bundle.target}-sample_project-experiment
+    default: /Users/${workspace.current_user.userName}/sample_project-experiment_${bundle.target}
   model_name:
     description: Model name for the model training.
-    default: sample_project-model
+    default: faq_semantic_search_model_${bundle.target}
   catalog_name:
     description: The catalog name to save the trained model
-    
+  schema_name:
+    description: The schema name to save the trained model
+    default: ${bundle.target}_sample_project
+
 include:
   # Resources folder contains ML artifact resources for the ML project that defines model and experiment
   # And workflows resources for the ML project including model training -> validation -> deployment,
@@ -28,29 +31,32 @@ include:
 
 # Deployment Target specific values for workspace
 targets:
-  dev:  # UC Catalog Name 
+  dev:
     mode: development
     default: true
     variables:
-      catalog_name: dev
+      catalog_name: workspace
+      schema_name: dev_sample_project
     workspace:
-      # TODO: add dev workspace URL
-      host:
+      profile: DEFAULT
 
   staging:
     variables:
-      catalog_name: staging
+      catalog_name: workspace
+      schema_name: staging_sample_project
     workspace:
-      host: https://adb-xxxx.xx.azuredatabricks.net
+      profile: DEFAULT
 
   prod:
     variables:
-      catalog_name: prod
+      catalog_name: workspace
+      schema_name: prod_sample_project
     workspace:
-      host: https://adb-xxxx.xx.azuredatabricks.net
+      profile: DEFAULT
 
   test:
     variables:
-      catalog_name: test
+      catalog_name: workspace
+      schema_name: test_sample_project
     workspace:
-      host: https://adb-xxxx.xx.azuredatabricks.net
+      profile: DEFAULT

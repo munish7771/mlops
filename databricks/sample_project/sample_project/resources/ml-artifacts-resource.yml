@@ -14,15 +14,14 @@ grants: &grants
 # Defines model and experiments
 resources:
   registered_models:
-      model:
-        name: ${var.model_name}
-        catalog_name: ${var.catalog_name}
-        schema_name: sample_project
-        comment: Registered model in Unity Catalog for the "sample_project" ML Project for ${bundle.target} deployment target.
-        <<: *grants
+    model:
+      name: ${var.model_name}
+      catalog_name: ${var.catalog_name}
+      schema_name: ${var.schema_name}
+      comment: Registered model in Unity Catalog for the "sample_project" ML Project for ${bundle.target} deployment target.
+      <<: *grants
 
   experiments:
     experiment:
       name: ${var.experiment_name}
       <<: *permissions
-      description: MLflow Experiment used to track runs for sample_project project.
