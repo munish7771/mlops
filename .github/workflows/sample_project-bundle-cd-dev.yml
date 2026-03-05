@@ -23,7 +23,28 @@ env:
   
 
 jobs:
+  unit_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Install dependencies
+        run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install -r ../test-requirements.txt
+      - name: Run tests with pytest
+        run: |
+            pytest
+
   dev:
+    needs: unit_tests
     concurrency: sample_project-dev-bundle-job
     runs-on: ubuntu-latest
     steps:
@@ -37,3 +58,11 @@ jobs:
         id: deploy
         run: |
           databricks bundle deploy -t dev
+      - name: Run Feature Engineering Workflow for Dev
+        id: feature_engineering
+        run: |
+          databricks bundle run write_feature_table_job -t dev
+      - name: Run Training Workflow for Dev
+        id: training
+        run: |
+          databricks bundle run model_training_job -t dev
