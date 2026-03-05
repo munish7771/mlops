@@ -37,26 +37,18 @@ targets:
     variables:
       catalog_name: workspace
       schema_name: dev_sample_project
-    workspace:
-      profile: DEFAULT
 
   staging:
     variables:
       catalog_name: workspace
       schema_name: staging_sample_project
-    workspace:
-      profile: DEFAULT
 
   prod:
     variables:
       catalog_name: workspace
       schema_name: prod_sample_project
-    workspace:
-      profile: DEFAULT
 
   test:
     variables:
       catalog_name: workspace
       schema_name: test_sample_project
-    workspace:
-      profile: DEFAULT
