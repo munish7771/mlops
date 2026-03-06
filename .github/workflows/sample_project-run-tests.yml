@@ -35,6 +35,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
+      - name: Cache pip (makes tests run faster)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('sample_project/requirements.txt', 'test-requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
             python -m pip install --upgrade pip
