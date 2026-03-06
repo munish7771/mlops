@@ -40,8 +40,8 @@
 # COMMAND ----------
 
 import os
-notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
-%cd $notebook_path
+# notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
+# %cd $notebook_path
 
 # COMMAND ----------
 
@@ -54,9 +54,9 @@ dbutils.library.restartPython()
 # COMMAND ----------
 
 import os
-notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
-%cd $notebook_path
-%cd ../
+# notebook_path =  '/Workspace/' + os.path.dirname(dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get())
+# %cd $notebook_path
+# %cd ../
 
 # COMMAND ----------
 
@@ -67,10 +67,9 @@ dbutils.widgets.text(
 )
 dbutils.widgets.dropdown("run_mode", "disabled", ["disabled", "dry_run", "enabled"], "Run Mode")
 dbutils.widgets.dropdown("enable_baseline_comparison", "false", ["true", "false"], "Enable Baseline Comparison")
-dbutils.widgets.text("validation_input", "SELECT * FROM delta.`dbfs:/databricks-datasets/nyctaxi-with-zipcodes/subsampled`", "Validation Input")
-
-dbutils.widgets.text("model_type", "regressor", "Model Type")
-dbutils.widgets.text("targets", "fare_amount", "Targets")
+dbutils.widgets.text("validation_input", "SELECT * FROM delta.`dbfs:/databricks-datasets/faqs`", "Validation Input")
+dbutils.widgets.text("model_type", "question_answering", "Model Type")
+dbutils.widgets.text("targets", "score", "Targets")
 dbutils.widgets.text("custom_metrics_loader_function", "custom_metrics", "Custom Metrics Loader Function")
 dbutils.widgets.text("validation_thresholds_loader_function", "validation_thresholds", "Validation Thresholds Loader Function")
 dbutils.widgets.text("evaluator_config_loader_function", "evaluator_config", "Evaluator Config Loader Function")
@@ -214,54 +213,6 @@ def log_to_model_description(run, success):
         name=model_name, version=model_version, description=description
     )
 
-
-
-from datetime import timedelta, timezone
-import math
-import pyspark.sql.functions as F
-from pyspark.sql.types import IntegerType
-
-
-def rounded_unix_timestamp(dt, num_minutes=15):
-    """
-    Ceilings datetime dt to interval num_minutes, then returns the unix timestamp.
-    """
-    nsecs = dt.minute * 60 + dt.second + dt.microsecond * 1e-6
-    delta = math.ceil(nsecs / (60 * num_minutes)) * (60 * num_minutes) - nsecs
-    return int((dt + timedelta(seconds=delta)).replace(tzinfo=timezone.utc).timestamp())
-
-
-rounded_unix_timestamp_udf = F.udf(rounded_unix_timestamp, IntegerType())
-
-
-def rounded_taxi_data(taxi_data_df):
-    # Round the taxi data timestamp to 15 and 30 minute intervals so we can join with the pickup and dropoff features
-    # respectively.
-    taxi_data_df = (
-        taxi_data_df.withColumn(
-            "rounded_pickup_datetime",
-            F.to_timestamp(
-                rounded_unix_timestamp_udf(
-                    taxi_data_df["tpep_pickup_datetime"], F.lit(15)
-                )
-            ),
-        )
-        .withColumn(
-            "rounded_dropoff_datetime",
-            F.to_timestamp(
-                rounded_unix_timestamp_udf(
-                    taxi_data_df["tpep_dropoff_datetime"], F.lit(30)
-                )
-            ),
-        )
-        .drop("tpep_pickup_datetime")
-        .drop("tpep_dropoff_datetime")
-    )
-    taxi_data_df.createOrReplaceTempView("taxi_data")
-    return taxi_data_df
-
-
-data = rounded_taxi_data(data)
 
 
 

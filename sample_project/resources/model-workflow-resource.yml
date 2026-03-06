@@ -31,9 +31,9 @@ resources:
               experiment_name: ${var.experiment_name}
               run_mode: disabled
               enable_baseline_comparison: "false"
-              validation_input: SELECT * FROM delta.`dbfs:/databricks-datasets/nyctaxi-with-zipcodes/subsampled`
-              model_type: regressor
-              targets: fare_amount
+              validation_input: SELECT * FROM delta.`dbfs:/databricks-datasets/faqs`
+              model_type: question_answering
+              targets: score
               custom_metrics_loader_function: custom_metrics
               validation_thresholds_loader_function: validation_thresholds
               evaluator_config_loader_function: evaluator_config

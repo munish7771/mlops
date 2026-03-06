@@ -19,9 +19,14 @@
 # * input_start_date (optional)   - Used to limit feature computations based on timestamp_column values.
 # * input_end_date (optional)     - Used to limit feature computations based on timestamp_column values.
 # *
-# * features_transform_module (required) - Python module containing the feature transform logic.
+# features_transform_module (required) - Python module containing the feature transform logic.
 ##################################################################################
 
+# COMMAND ----------
+
+# MAGIC %pip install -r ../../requirements.txt
+
+# COMMAND ----------
 
 # List of input args needed to run this notebook as a job.
 # Provide them via DB widgets or notebook arguments.
@@ -29,7 +34,7 @@
 # A Hive-registered Delta table containing the input data.
 dbutils.widgets.text(
     "input_table_path",
-    "/databricks-datasets/nyctaxi-with-zipcodes/subsampled",
+    "/databricks-datasets/faqs",
     label="Input Table Name",
 )
 # Input start date.
@@ -39,24 +44,24 @@ dbutils.widgets.text("input_end_date", "", label="Input End Date")
 # Timestamp column. Will be used to filter input start/end dates.
 # This column is also used as a timestamp key of the feature table.
 dbutils.widgets.text(
-    "timestamp_column", "tpep_pickup_datetime", label="Timestamp column"
+    "timestamp_column", "created_at", label="Timestamp column"
 )
 
 # Feature table to store the computed features.
 dbutils.widgets.text(
     "output_table_name",
-    "dev.sample_project.trip_pickup_features",
+    "dev.sample_project.faq_features",
     label="Output Feature Table Name",
 )
 
 # Feature transform module name.
 dbutils.widgets.text(
-    "features_transform_module", "pickup_features", label="Features transform file."
+    "features_transform_module", "faq_features", label="Features transform file."
 )
 # Primary Keys columns for the feature table;
 dbutils.widgets.text(
     "primary_keys",
-    "zip",
+    "id",
     label="Primary keys columns for the feature table, comma separated.",
 )
 
