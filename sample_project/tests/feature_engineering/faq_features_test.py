@@ -9,8 +9,7 @@ from sample_project.feature_engineering.features.faq_features import compute_fea
 def spark(request):
     """fixture for creating a spark session"""
     spark = (
-        SparkSession.builder.master("local[1]")
-        .appName("pytest-pyspark-local-testing")
+        SparkSession.builder.appName("pytest-pyspark-local-testing")
         .getOrCreate()
     )
     request.addfinalizer(lambda: spark.stop())
