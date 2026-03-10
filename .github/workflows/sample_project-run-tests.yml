@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SPARK_LOCAL_IP: 127.0.0.1
+      JAVA_TOOL_OPTIONS: "-Djava.net.preferIPv4Stack=true"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
